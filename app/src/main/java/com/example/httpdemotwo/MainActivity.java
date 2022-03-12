@@ -14,13 +14,10 @@ import android.util.Log;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
-
-    private RecyclerView recyclerView;
     Post post;
+    private RecyclerView recyclerView;
 
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
@@ -34,25 +31,24 @@ public class MainActivity extends AppCompatActivity {
         }
     });
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://www.mindordz.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        JSONPlaceholder jsonPlaceholder = retrofit.create(JSONPlaceholder.class);
-        Call<Post> call = jsonPlaceholder.getPost("minApp113988", "zcz002");
+        retrieveJson();
+
+    }
+
+    public void retrieveJson() {
+        Call<Post> call = ApiClient.getInstance().getApi().getPost("minApp113988", "zcz002");
         call.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
+                Log.e("TAG", "" + response);
                 Post mPost = response.body();
                 Message msg = new Message();
                 msg.what = 100;
@@ -65,5 +61,10 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("TAG", "onFailure" + t.getMessage());
             }
         });
+
+
     }
+
+
 }
+
