@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void retrieveJson() {
-        Call<Post> call = ApiClient.getInstance().getApi().getPost("minApp113988", "zcz002");
+        Call<Post> call = ApiClient.getInstance("").getApi().getPost("minApp113988", "zcz002");
         call.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
